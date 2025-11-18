@@ -28,9 +28,9 @@ const App: React.FC = () => {
   }, [data.tasks, data.concerns]);
 
   const { projects, nowTasks, todoTasks } = useMemo(() => {
-    const projects = data.tasks.filter(t => t.category === TaskCategory.Project).sort((a,b) => a.order - b.order);
-    const nowTasks = data.tasks.filter(t => t.category === TaskCategory.Now).sort((a,b) => a.order - b.order);
-    const todoTasks = data.tasks.filter(t => t.category === TaskCategory.ToDo).sort((a,b) => a.order - b.order);
+    const projects = data.tasks.filter(t => t.category === TaskCategory.Project && !t.parentTaskId).sort((a,b) => a.order - b.order);
+    const nowTasks = data.tasks.filter(t => t.category === TaskCategory.Now && !t.parentTaskId).sort((a,b) => a.order - b.order);
+    const todoTasks = data.tasks.filter(t => t.category === TaskCategory.ToDo && !t.parentTaskId).sort((a,b) => a.order - b.order);
     return { projects, nowTasks, todoTasks };
   }, [data.tasks]);
   
@@ -44,10 +44,11 @@ const App: React.FC = () => {
   };
   
   const handleAddSubTask = (parentTaskId: string, title: string) => {
+    const parentTask = data.tasks.find(t => t.id === parentTaskId);
     data.addTask({
         title,
         description: '', // Default description
-        category: TaskCategory.ToDo, // Default category
+        category: parentTask?.category || TaskCategory.ToDo, // Inherit parent's category
         parentTaskId,
     });
   };
