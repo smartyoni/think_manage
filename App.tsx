@@ -7,9 +7,11 @@ import CreationModal from './components/CreationModal';
 import { ProjectIcon, NowIcon, ToDoIcon, ConcernIcon, PlusIcon } from './components/icons';
 
 type View = 'tasks' | 'concerns';
+type TaskCategoryTab = 'project' | 'now' | 'todo';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('tasks');
+  const [mobileTaskTab, setMobileTaskTab] = useState<TaskCategoryTab>('project');
   const [selectedItem, setSelectedItem] = useState<Task | Concern | null>(null);
   const [creationModalType, setCreationModalType] = useState<'task' | 'concern' | null>(null);
   const data = useData();
@@ -90,10 +92,39 @@ const App: React.FC = () => {
                 <PlusIcon /> <span className="ml-2 hidden sm:inline">새로운 할 일 추가</span>
               </button>
             </div>
-            <div className="flex flex-col md:flex-row gap-6">
+
+            {/* Desktop: 3-column layout */}
+            <div className="hidden md:flex flex-col md:flex-row gap-6">
               {renderTaskList('프로젝트', projects, <ProjectIcon />)}
               {renderTaskList('지금할일', nowTasks, <NowIcon />)}
               {renderTaskList('해야할일', todoTasks, <ToDoIcon />)}
+            </div>
+
+            {/* Mobile: Tab-based layout */}
+            <div className="md:hidden">
+              <div className="flex gap-2 mb-4 bg-slate-200 p-1 rounded-lg">
+                <button
+                  onClick={() => setMobileTaskTab('project')}
+                  className={`flex-1 px-3 py-2 text-sm font-semibold rounded-md transition flex items-center justify-center gap-1 ${mobileTaskTab === 'project' ? 'bg-white shadow text-indigo-600' : 'text-gray-600'}`}
+                >
+                  <ProjectIcon /> <span className="hidden xs:inline">프로젝트</span>
+                </button>
+                <button
+                  onClick={() => setMobileTaskTab('now')}
+                  className={`flex-1 px-3 py-2 text-sm font-semibold rounded-md transition flex items-center justify-center gap-1 ${mobileTaskTab === 'now' ? 'bg-white shadow text-indigo-600' : 'text-gray-600'}`}
+                >
+                  <NowIcon /> <span className="hidden xs:inline">지금</span>
+                </button>
+                <button
+                  onClick={() => setMobileTaskTab('todo')}
+                  className={`flex-1 px-3 py-2 text-sm font-semibold rounded-md transition flex items-center justify-center gap-1 ${mobileTaskTab === 'todo' ? 'bg-white shadow text-indigo-600' : 'text-gray-600'}`}
+                >
+                  <ToDoIcon /> <span className="hidden xs:inline">할일</span>
+                </button>
+              </div>
+              {mobileTaskTab === 'project' && renderTaskList('프로젝트', projects, <ProjectIcon />)}
+              {mobileTaskTab === 'now' && renderTaskList('지금할일', nowTasks, <NowIcon />)}
+              {mobileTaskTab === 'todo' && renderTaskList('해야할일', todoTasks, <ToDoIcon />)}
             </div>
           </>
         ) : (
