@@ -1,12 +1,26 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4f46e5" />
+    <meta name="description" content="할일과 고민을 체계적으로 관리하는 앱" />
     <title>생각관리</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>💭</text></svg>" />
+    <link rel="manifest" href="/think_manage/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/think_manage/icon-192x192.png" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Register service worker for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/think_manage/sw.js').catch(() => {
+            // Service worker registration failed, app will still work offline-lite mode
+          });
+        });
+      }
+    </script>
   </head>
   <body class="bg-slate-100">
     <div id="root"></div>
