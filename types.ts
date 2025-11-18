@@ -52,6 +52,8 @@ export interface Task {
   progressPercent: number;
   progressLog: LogEntry[];
   order: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Concern {
@@ -61,4 +63,6 @@ export interface Concern {
   status: ConcernStatus;
   analysisLog: LogEntry[];
   resolutionAction: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
